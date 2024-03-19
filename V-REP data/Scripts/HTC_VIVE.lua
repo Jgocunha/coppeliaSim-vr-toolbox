@@ -38,8 +38,9 @@ getVisibleHandles = function(inInts, inFloats, inStrings, inBuffer)
 		property=sim.getObjectSpecialProperty(handles[i])
         val = sim.boolAnd32(property, sim.objectspecialproperty_renderable)
 		if val>0 then
-			simpleShapeHandles=sim.ungroupShape(handles[i])
-			--simpleShapeHandles = {handles[i]}
+			--simpleShapeHandles=sim.ungroupShape(handles[i])
+			-- ungroup shapes is destroying some models.
+			simpleShapeHandles = {handles[i]}
 			if #simpleShapeHandles>1 then
 				toRestore[#toRestore + 1] = simpleShapeHandles
 			end
@@ -57,7 +58,7 @@ end
 function sysCall_cleanup()
     if (toRestore==nil)==false then
 		for i = 1, #toRestore, 1 do
-			sim.groupShapes(toRestore[i]) -- vrep does not seem to do this correctly 
+			sim.groupShapes(toRestore[i]) -- vrep does not seem to do this correctly. YUP! 
 		end
 	end
 end
